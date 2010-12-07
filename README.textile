@@ -1,3 +1,6 @@
+This has been modified to work with DataMapper on Rails3.
+Instructions are the same except for the ActiveRecord setup.
+
 h1. Delayed::Job
 
 Delayed_job (or DJ) encapsulates the common pattern of asynchronously executing longer tasks in the background. 
@@ -100,7 +103,7 @@ You can also run by writing a simple @script/job_runner@, and invoking it extern
 
 Workers can be running on any computer, as long as they have access to the database and their clock is in sync. You can even
 run multiple workers on per computer, but you must give each one a unique name. (TODO: put in an example)
-Keep in mind that each worker will check the database at least every 5 seconds.
+Keep in mind that each worker will check the database at least every 60 seconds.
 
 Note: The rake task will exit if the database has any network connectivity problems.
 

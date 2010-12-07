@@ -11,31 +11,18 @@ Gem::Specification.new do |s|
   s.authors  = ["Tobias Lütke"]
 
   # s.bindir = "bin"
-  # s.executables = ["delayed_job"]
+  # s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   # s.default_executable = "delayed_job"
 
   s.has_rdoc = false
   s.rdoc_options = ["--main", "README.textile"]
   s.extra_rdoc_files = ["README.textile"]
 
-  # run git ls-files to get an updated list
-  s.files = %w[
-    MIT-LICENSE
-    README.textile
-    delayed_job.gemspec
-    init.rb
-    lib/delayed/job.rb
-    lib/delayed/message_sending.rb
-    lib/delayed/performable_method.rb
-    lib/delayed/worker.rb
-    lib/delayed_job.rb
-    tasks/jobs.rake
-    tasks/tasks.rb
-  ]
-  s.test_files = %w[
-    spec/database.rb
-    spec/delayed_method_spec.rb
-    spec/job_spec.rb
-    spec/story_spec.rb
-  ]
+  s.files         = `git ls-files`.split("\n")
+  s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
+  s.require_paths = ["lib"]
+  
+  s.add_runtime_dependency(%q<dm-core>,           ["~> 1.0.2"])
+  s.add_runtime_dependency(%q<dm-timestamps>,     ["~> 1.0.2"])
+  s.add_runtime_dependency(%q<dm-types>,          ["~> 1.0.2"])
 end
