@@ -2,6 +2,7 @@ module Delayed
   class PerformableMethod < Struct.new(:object, :method, :args)
     CLASS_STRING_FORMAT = /^CLASS\:([A-Z][\w\:]+)$/
     AR_STRING_FORMAT    = /^AR\:([A-Z][\w\:]+)\:(\d+)$/
+    DM_STRING_FORMAT    = /^DM\:([A-Z][\w\:]+)\:([_\w-]+)$/
 
     def initialize(object, method, args)
       raise NoMethodError, "undefined method `#{method}' for #{self.inspect}" unless object.respond_to?(method)
@@ -14,6 +15,7 @@ module Delayed
     def display_name  
       case self.object
       when CLASS_STRING_FORMAT then "#{$1}.#{method}"
+      when DM_STRING_FORMAT    then "#{$1}##{method}"
       when AR_STRING_FORMAT    then "#{$1}##{method}"
       else "Unknown##{method}"
       end      
@@ -31,17 +33,23 @@ module Delayed
     def load(arg)
       case arg
       when CLASS_STRING_FORMAT then $1.constantize
-      when AR_STRING_FORMAT    then $1.constantize.find($2)
+      when DM_STRING_FORMAT    then $1.constantize.get(*$2.split(','))
+      # when AR_STRING_FORMAT    then $1.constantize.find($2)
       else arg
       end
     end
 
     def dump(arg)
       case arg
-      when Class              then class_to_string(arg)
-      when ActiveRecord::Base then ar_to_string(arg)
+      when Class                 then class_to_string(arg)
+      when DataMapper::Resource  then dm_to_string(arg)
+      # when ActiveRecord::Base then ar_to_string(arg)
       else arg
       end
+    end
+
+    def dm_to_string(obj)
+      "DM:#{obj.class}:#{obj.key.join(',')}"
     end
 
     def ar_to_string(obj)
