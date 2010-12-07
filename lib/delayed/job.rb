@@ -1,3 +1,7 @@
+require 'dm-core'
+require 'dm-timestamps'
+require 'dm-types'
+
 module Delayed
 
   class DeserializationError < StandardError
@@ -19,6 +23,8 @@ module Delayed
     property   :locked_at,  DateTime                 # Set when a client is working on this object
     property   :failed_at,  DateTime                 # Set when all retries have failed (actually, by default, the record is deleted instead)
     property   :locked_by,  String                   # Who is working on this object (if locked)
+    
+    timestamps :at
     
     before :save do
       self.run_at ||= Time.now
