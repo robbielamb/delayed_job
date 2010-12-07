@@ -84,7 +84,7 @@ module Delayed
         save!
       else
         ::Rails.logger.info "* [JOB] PERMANENTLY removing #{self.name} because of #{attempts} consequetive failures."
-        destroy_failed_jobs ? destroy : update_attribute(:failed_at, Delayed::Job.db_time_now)
+        destroy_failed_jobs ? destroy : update(:failed_at, Delayed::Job.db_time_now)
       end
     end
     
@@ -241,6 +241,11 @@ module Delayed
      # Moved into its own method so that new_relic can trace it.
      def invoke_job
        payload_object.perform
+     end
+     
+     # Get the current time
+     def self.db_time_now
+       Time.now
      end
   end
 
