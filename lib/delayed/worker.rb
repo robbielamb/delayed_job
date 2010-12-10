@@ -3,10 +3,8 @@ module Delayed
     SLEEP = 60
 
     cattr_accessor :logger
-    self.logger = if defined?(Merb::Logger)
-      Merb.logger
-    elsif defined?(RAILS_DEFAULT_LOGGER)
-      RAILS_DEFAULT_LOGGER
+    self.logger = if defined?(::Rails::Logger)
+      Rails.logger
     end
 
     def initialize(options={})
@@ -17,6 +15,7 @@ module Delayed
 
     def start
       say "*** Starting job worker #{Delayed::Job.worker_name}"
+      write_pid_file
 
       trap('TERM') { say 'Exiting...'; $exit = true }
       trap('INT')  { say 'Exiting...'; $exit = true }
@@ -43,6 +42,25 @@ module Delayed
 
     ensure
       Delayed::Job.clear_locks!
+      remove_pid_file
+    end
+
+    def write_pid_file
+      File.open(self.pid_file, 'w') do |pid_file|
+        pid_file.write Process.pid
+      end
+    end
+
+    def remove_pid_file
+      File.unlink self.pid_file
+    end
+
+    def pid_file
+      if defined?(::Rails.root)
+        ::Rails.root.to_s + "/tmp/pids/delayed_job.#{Process.pid}.pid"
+      else
+        "./delayed_job.#{Process.pid}.pid"
+      end
     end
 
     def say(text)
