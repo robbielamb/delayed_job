@@ -195,7 +195,7 @@ module Delayed
          # We already own this job, this may happen if the job queue crashes.
          # Simply resume and update the locked_at
          # self.class.update_all(["locked_at = ?", now], ["id = ? and locked_by = ?", id, worker])
-         self.class.all(:id => id, :worker => worker).update(:locked_at => worker)
+         self.class.all(:id => id, :locked_by => worker).update(:locked_at => now)
        end
        if affected_rows == true
          self.locked_at    = now
