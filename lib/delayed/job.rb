@@ -18,11 +18,11 @@ module Delayed
     property   :priority,   Integer,  :default => 0  # Allows some jobs to jump to the front of the queue
     property   :attempts,   Integer,  :default => 0  # Provides for retries, but still fail eventually.
     property   :handler,    Yaml                     # YAML-encoded string of the object that will do work
-    property   :last_error, String                   # reason for last failure (See Note below)
+    property   :last_error, Text                     # reason for last failure (See Note below)
     property   :run_at,     DateTime                 # When to run. Could be Time.now for immediately, or sometime in the future.
     property   :locked_at,  DateTime                 # Set when a client is working on this object
     property   :failed_at,  DateTime                 # Set when all retries have failed (actually, by default, the record is deleted instead)
-    property   :locked_by,  String                   # Who is working on this object (if locked)
+    property   :locked_by,  String,   :length => 256 # Who is working on this object (if locked)
     
     timestamps :at
     
