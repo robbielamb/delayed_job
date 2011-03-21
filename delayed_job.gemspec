@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #version = File.read('README.textile').scan(/^\*\s+([\d\.]+)/).flatten
 
 Gem::Specification.new do |s|
@@ -22,7 +23,7 @@ Gem::Specification.new do |s|
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.require_paths = ["lib"]
   
-  s.add_runtime_dependency(%q<dm-core>,           ["~> 1.0.2"])
-  s.add_runtime_dependency(%q<dm-timestamps>,     ["~> 1.0.2"])
-  s.add_runtime_dependency(%q<dm-types>,          ["~> 1.0.2"])
+  s.add_runtime_dependency(%q<dm-core>,           ["~> 1.1.0"])
+  s.add_runtime_dependency(%q<dm-timestamps>,     ["~> 1.1.0"])
+  s.add_runtime_dependency(%q<dm-types>,          ["~> 1.1.0"])
 end
